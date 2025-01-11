@@ -1,7 +1,6 @@
 'use client'
 
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { signIn } from "next-auth/react"
 
 
@@ -20,11 +19,10 @@ export default function Home() {
     <div className="text-white">
       quick dev bookinggg
     </div>
-    <Link href="/onboarding">
       <Button  onClick={loginWithGoogle}>
         sign inn 
       </Button>
-    </Link>
+
     </div>
   );
 }
