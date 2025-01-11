@@ -1,6 +1,3 @@
-
-
-
 "use client"
 
 import { useState } from 'react'
@@ -17,6 +14,7 @@ import {
   Trophy,
   Home
 } from 'lucide-react'
+import { useSession, signOut } from "next-auth/react";
 
 const routes = [
     {
@@ -82,6 +80,10 @@ export default function Sidebar() {
               </Link>
             )
           })}
+          <Button onClick={()=>signOut({
+                     redirect: true,
+                      callbackUrl: `${window.location.origin}/`
+                    })}>Log Out</Button>
         </nav>
       </aside>
 

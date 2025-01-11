@@ -21,7 +21,7 @@ interface DeveloperProfile {
 export default function OnBoarding() {
   const router = useRouter()
   const [step, setStep] = useState(0)
-  const [userType, setUserType] = useState<'user' | 'developer' | null>(null)
+  const [userType, setUserType] = useState<'USER' | 'DEVELOPER' | null>(null)
   const [developerProfile, setDeveloperProfile] = useState<DeveloperProfile>({
     bio: '',
     github: '',
@@ -32,7 +32,7 @@ export default function OnBoarding() {
     experience: ''
   })
 
-  const handleRoleChange = async (role: 'user' | 'developer') => {
+  const handleRoleChange = async (role: 'USER' | 'DEVELOPER') => {
     setUserType(role)
     // Update the role in the database using Prisma
     // try {
@@ -62,7 +62,7 @@ export default function OnBoarding() {
   }
 
   const handleNext = () =>{
-    if (userType === 'user') {
+    if (userType === 'USER') {
         router.push('/dashboard')
       } else {
         setStep(1)
@@ -102,7 +102,7 @@ export default function OnBoarding() {
                   name="role"
                   value="user"
                   className="mt-1"
-                  onChange={() => handleRoleChange('user')}
+                  onChange={() => handleRoleChange('USER')}
                 />
                 <div>
                   <span className="font-bold">User</span>
@@ -118,7 +118,7 @@ export default function OnBoarding() {
                   name="role"
                   value="developer"
                   className="mt-1"
-                  onChange={() => handleRoleChange('developer')}
+                  onChange={() => handleRoleChange('DEVELOPER')}
                 />
                 <div>
                   <span className="font-bold">Developer</span>

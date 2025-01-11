@@ -1,28 +1,29 @@
-'use client'
 
-import { Button } from "@/components/ui/button";
-import { signIn } from "next-auth/react"
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/lib/auth";
+import prisma from "../../prisma/prisma";
+import { redirect } from "next/navigation";
+import GoogleSignInButton from "@/components/canvas/GoogleSignInButton";
 
+export default async function Home() {
+  const session = await getServerSession(authOptions);
 
-export default function Home() {
+  if (session?.user?.email) {
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+    });
 
-  const loginWithGoogle = async () =>{
-    try {
-      signIn("google", {callbackUrl: 'http://localhost:3000/home'})
-    } catch (error) {
-      console.log("error", error)
+    if (user) {
+      const isNewUser = user.createdAt === user.updatedAt;
+      redirect(isNewUser ? "/onboarding" : "/dashboard");
     }
-  } 
+  }
 
   return (
-    <div className="m-10">
-    <div className="text-white">
-      quick dev bookinggg
-    </div>
-      <Button  onClick={loginWithGoogle}>
-        sign inn 
-      </Button>
-
+    <div className="flex flex-col items-center h-screen">
+      <h1 className="text-2xl font-bold mb-4">Welcome to the App</h1>
+    <GoogleSignInButton>Sign in</GoogleSignInButton>
+    
     </div>
   );
 }

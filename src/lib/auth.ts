@@ -1,12 +1,12 @@
 
 import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import db from "../../prisma/prisma"
+import prisma from "../../prisma/prisma"
 import type { Adapter } from "next-auth/adapters";
 import { SessionStrategy } from "next-auth";
 
 export const authOptions = {
-  adapter: PrismaAdapter(db) as Adapter,
+  adapter: PrismaAdapter(prisma) as Adapter,
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID || "",
@@ -24,11 +24,7 @@ export const authOptions = {
     async signIn({ user, profile }: any) {
 
       try {
-        await db.user.upsert({
-          select: {
-            id: true
-          },
-
+        await prisma.user.upsert({
           where: { email: user.email! },
           update: {
             name: user.name,
@@ -50,7 +46,7 @@ export const authOptions = {
 
    async jwt({ user, token }: any) {
       if (user) {
-        const dbUser = await db.user.findUnique({
+        const dbUser = await prisma.user.findUnique({
           where: { email: user.email! },
         });
         if (dbUser) {
