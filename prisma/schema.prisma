@@ -1,0 +1,84 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String      @id @default(cuid())
+  name           String?
+  email          String      @unique
+  image          String?
+  role           Role        @default(CUSTOMER)    
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  bookingsAsDev  Booking[]   @relation("DevBookings")
+  bookingsAsUser Booking[]   @relation("UserBookings")
+
+  developerProfile DeveloperProfile?
+}
+
+
+model DeveloperProfile {
+  id             String         @id @default(cuid())
+  userId         String         @unique
+  bio            String?
+  github         String?        // GitHub profile URL
+  portfolio      String?        // Portfolio website URL
+  hourlyRate     Float?      
+  availability   Boolean        @default(true)  
+  technologies   String[]       // List of tech the dev works with
+  experience     String?        // Years of experience
+  user           User           @relation(fields: [userId], references: [id])
+}
+
+
+model Booking {
+  id          String    @id @default(cuid())
+  userId      String
+  devId       String
+  date        DateTime
+  duration    Int       // Duration in minutes
+  status      BookingStatus @default(PENDING)
+  paymentId   String?   // Reference to payment
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  user        User      @relation("UserBookings", fields: [userId], references: [id])
+  dev         User      @relation("DevBookings", fields: [devId], references: [id])
+
+  Payment Payment[]
+}
+
+model Payment {
+  id          String    @id @default(cuid())
+  bookingId   String
+  amount      Float
+  currency    String    
+  status      PaymentStatus @default(PENDING)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  booking     Booking   @relation(fields: [bookingId], references: [id])
+}
+
+enum Role {
+  CUSTOMER
+  DEV
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
