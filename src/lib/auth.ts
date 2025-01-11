@@ -1,5 +1,4 @@
 
-import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import db from "../../prisma/prisma"
@@ -17,7 +16,7 @@ export const authOptions = {
   ],
   secret: process.env.NEXTAUTH_SECRET || "secr3t",
   pages: {
-    signIn: "/auth",
+    signIn: "/",
   },
   session: { strategy: "jwt" as SessionStrategy },
   callbacks: {
@@ -39,7 +38,6 @@ export const authOptions = {
             email: user.email!,
             name: user.name!,
             image: user.image!,
-            role: "USER", 
           },
         });
       } catch (error) {

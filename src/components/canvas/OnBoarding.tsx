@@ -1,4 +1,3 @@
-
 'use client'
 
 import { useState } from 'react'
@@ -33,20 +32,48 @@ export default function OnBoarding() {
     experience: ''
   })
 
-  const handleUserTypeSelect = (value: string) => {
-    setUserType(value as 'user' | 'developer')
-    if (value === 'user') {
-      router.push('/dashboard')
-    } else {
-      setStep(1)
-    }
+  const handleRoleChange = async (role: 'user' | 'developer') => {
+    setUserType(role)
+    // Update the role in the database using Prisma
+    // try {
+    //   const response = await fetch("/api/updateRole", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({ role }),
+    //   })
+
+    //   if (!response.ok) {
+    //     throw new Error("Failed to update role")
+    //   }
+
+    //   console.log("Role updated successfully:", role)
+
+    //   if (role === 'user') {
+    //     router.push('/dashboard')
+    //   } else {
+    //     setStep(1)
+    //   }
+    // } catch (error) {
+    //   console.error("Error updating role:", error)
+    // }
+
+  }
+
+  const handleNext = () =>{
+    if (userType === 'user') {
+        router.push('/dashboard')
+      } else {
+        setStep(1)
+      }
   }
 
   const handleNextStep = () => {
     if (step < 2) {
       setStep(step + 1)
     } else {
-      router.push('/developer/profile')
+      router.push('/dashboard')
     }
   }
 
@@ -67,15 +94,43 @@ export default function OnBoarding() {
           <div className="space-y-6">
             <h1 className="text-3xl font-bold">Welcome! Let's get started</h1>
             <p className="text-gray-400">Are you a developer or a user?</p>
-            <Select onValueChange={handleUserTypeSelect}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select your role" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="user">User</SelectItem>
-                <SelectItem value="developer">Developer</SelectItem>
-              </SelectContent>
-            </Select>
+
+            <div className="space-y-4">
+              <label className="flex items-start space-x-3">
+                <input
+                  type="radio"
+                  name="role"
+                  value="user"
+                  className="mt-1"
+                  onChange={() => handleRoleChange('user')}
+                />
+                <div>
+                  <span className="font-bold">User</span>
+                  <p className="text-gray-500 text-sm">
+                    Select this option if you want to explore the platform as a user.
+                  </p>
+                </div>
+              </label>
+
+              <label className="flex items-start space-x-3">
+                <input
+                  type="radio"
+                  name="role"
+                  value="developer"
+                  className="mt-1"
+                  onChange={() => handleRoleChange('developer')}
+                />
+                <div>
+                  <span className="font-bold">Developer</span>
+                  <p className="text-gray-500 text-sm">
+                    Choose this option if you want to contribute or manage projects as a developer.
+                  </p>
+                </div>
+              </label>
+            </div>
+
+            <Button onClick={handleNext}>Next</Button>
+           
           </div>
         )
       case 1:
@@ -138,9 +193,8 @@ export default function OnBoarding() {
                     <SelectValue placeholder="Select availability" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="full-time">Full-time</SelectItem>
-                    <SelectItem value="part-time">Part-time</SelectItem>
-                    <SelectItem value="contract">Contract</SelectItem>
+                    <SelectItem value="true">Available</SelectItem>
+                    <SelectItem value="false">Not Available</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -197,4 +251,3 @@ export default function OnBoarding() {
     </div>
   )
 }
-

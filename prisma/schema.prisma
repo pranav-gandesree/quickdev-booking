@@ -12,7 +12,7 @@ model User {
   name           String?
   email          String      @unique
   image          String?
-  role           Role        @default(CUSTOMER)    
+  role           Role        @default(USER)    
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
   bookingsAsDev  Booking[]   @relation("DevBookings")
@@ -66,8 +66,8 @@ model Payment {
 }
 
 enum Role {
-  CUSTOMER
-  DEV
+  USER
+  DEVELOPER
 }
 
 enum BookingStatus {
