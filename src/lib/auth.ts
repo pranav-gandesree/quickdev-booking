@@ -153,6 +153,7 @@ export const authOptions = {
           // or if they're a developer with a complete profile
           session.user.hasOnboarded = user.role === 'USER' || 
             (user.role === 'DEVELOPER' && !!user.developerProfile)
+          
         }
       }
       return session

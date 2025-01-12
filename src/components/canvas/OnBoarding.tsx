@@ -18,6 +18,7 @@ interface DeveloperProfile {
   availability: string
   technologies: string[]
   experience: string
+  walletAddress: string
 }
 
 export default function OnBoarding() {
@@ -32,7 +33,8 @@ export default function OnBoarding() {
     hourlyRate: '',
     availability: '',
     technologies: [''],
-    experience: ''
+    experience: '',
+    walletAddress: ''
   })
 
   const handleRoleChange = async (role: 'USER' | 'DEVELOPER') => {
@@ -203,6 +205,16 @@ useEffect(()=>{
                   type="number"
                   value={developerProfile.hourlyRate}
                   onChange={(e) => updateDeveloperProfile('hourlyRate', e.target.value)}
+                  className="mt-1"
+                />
+              </div>
+              <div>
+                <Label htmlFor="walletAddress">Hourly Rate ($)</Label>
+                <Input
+                  id="walletAddress"
+                  type="string"
+                  value={developerProfile.walletAddress}
+                  onChange={(e) => updateDeveloperProfile('walletAddress', e.target.value)}
                   className="mt-1"
                 />
               </div>

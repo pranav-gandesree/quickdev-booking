@@ -10,13 +10,13 @@ export interface User {
   
   export interface Developer {
     id: string;
-    userId: string; // Reference to the User
+    userId: string; 
     bio: string;
-    experience: string; // Number of years as a string
+    experience: string; 
     hourlyRate: number;
     portfolio: string;
     github: string;
-    technologies: string[]; // Array of technologies
+    technologies: string[]; 
     availability: boolean;
     user: User; // Nested User object
   }

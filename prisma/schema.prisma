@@ -52,7 +52,8 @@ model User {
   name           String?
   email          String      @unique
   image          String?
-  role           Role        @default(USER)    
+  role           Role        @default(USER) 
+  walletAddress  String?    
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
   bookingsAsDev  Booking[]   @relation("DevBookings")
@@ -69,12 +70,13 @@ model DeveloperProfile {
   id             String         @id @default(cuid())
   userId         String         @unique
   bio            String?
-  github         String?        // GitHub profile URL
-  portfolio      String?        // Portfolio website URL
-  hourlyRate     Float?      
+  github         String?        
+  portfolio      String?        
+  hourlyRate     Float? 
+  walletAddress   String?      
   availability   Boolean        @default(true)  
-  technologies   String[]       // List of tech the dev works with
-  experience     String?        // Years of experience
+  technologies   String[]       
+  experience     String?        
   user           User           @relation(fields: [userId], references: [id])
 }
 
@@ -84,9 +86,11 @@ model Booking {
   userId      String
   devId       String
   date        DateTime
-  duration    Int       // Duration in minutes
+  duration    Int       // duration in minutes
   status      BookingStatus @default(PENDING)
-  paymentId   String?   // Reference to payment
+  paymentId   String?   // reference to payment
+  videoRoomId   String?      // added for video calls
+  videoRoomToken String?     // added for video call authentication
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
@@ -100,8 +104,10 @@ model Payment {
   id          String    @id @default(cuid())
   bookingId   String
   amount      Float
-  currency    String    
+  currency    String?    
   status      PaymentStatus @default(PENDING)
+  transactionId String? 
+  network       String?     // (devnet, mainnet)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
