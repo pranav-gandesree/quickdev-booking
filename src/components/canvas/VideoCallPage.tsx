@@ -126,7 +126,7 @@ export default function VideoCallPage({
 
     setIsProcessingPayment(true);
     try {
-      const connection = new Connection(process.env.NEXT_PUBLIC_SOLANA_RPC_URL!);
+        const connection = new Connection('https://api.devnet.solana.com');
       
       const transaction = new Transaction().add(
         SystemProgram.transfer({

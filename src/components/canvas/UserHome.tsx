@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
 import BookingModal from './BookingModel';
 import { useToast } from '@/hooks/use-toast';
-import { Connection } from '@solana/web3.js';
 import { Developer } from '@/types';
 import DeveloperCard from './DeveloperCard';
 import { useSession } from 'next-auth/react';
@@ -29,6 +28,7 @@ export default function UserHome() {
 
   useEffect(() => {
     fetchDevelopers();
+    console.log("user id is", session?.user.id)
   }, []);
 
   const fetchDevelopers = async () => {
@@ -103,6 +103,7 @@ export default function UserHome() {
         description: "Your video call room is ready. The payment will be processed after the call ends.",
         duration: 5000
       });
+
 
       // 4. Navigate to video call page
       window.location.href = `/call/${booking.id}`;

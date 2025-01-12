@@ -22,3 +22,17 @@ export interface User {
     walletAddress: string
   }
   
+
+
+  export interface BookingRequest {
+    userId: string;
+    devId: string;
+    date: Date;
+    duration: number;
+    amount: number;
+  }
+  
+  export interface TwilioVideoRoom {
+    id: string;
+    token: string;
+  }

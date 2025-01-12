@@ -57,7 +57,7 @@ export default function BookingModal({
               selected={selectedDate}
               onSelect={setSelectedDate}
               className="rounded-md border"
-              disabled={(date): any => date < new Date()}
+              disabled={(date): boolean => date.getTime() < new Date().setHours(0, 0, 0, 0)}
             />
           </div>
 
