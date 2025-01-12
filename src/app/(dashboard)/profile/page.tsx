@@ -1,8 +1,9 @@
+import Profile from "@/components/canvas/Profile"
 
 const ProfilePage = () => {
   return (
     <div>
-      profile page
+      <Profile/>
     </div>
   )
 }

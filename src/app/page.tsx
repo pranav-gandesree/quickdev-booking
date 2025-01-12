@@ -1,29 +1,28 @@
 
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth";
-import prisma from "../../prisma/prisma";
-import { redirect } from "next/navigation";
-import GoogleSignInButton from "@/components/canvas/GoogleSignInButton";
+'use client'
 
-export default async function Home() {
-  const session = await getServerSession(authOptions);
+import { signIn, useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 
-  if (session?.user?.email) {
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-    });
+export default function Home() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
 
-    if (user) {
-      const isNewUser = user.createdAt === user.updatedAt;
-      redirect(isNewUser ? "/onboarding" : "/dashboard");
-    }
-  }
 
   return (
-    <div className="flex flex-col items-center h-screen">
-      <h1 className="text-2xl font-bold mb-4">Welcome to the App</h1>
-    <GoogleSignInButton>Sign in</GoogleSignInButton>
-    
-    </div>
-  );
+    <main className="flex min-h-screen flex-col items-center justify-center">
+      <button
+        onClick={() =>  signIn("google", {callbackUrl: 'http://localhost:3000/onboarding'}) }
+        className="px-4 py-2 border flex gap-2 border-slate-200 rounded-lg hover:border-slate-400 hover:shadow transition duration-150"
+      >
+        <img 
+          className="w-6 h-6" 
+          src="https://www.svgrepo.com/show/475656/google-color.svg" 
+          loading="lazy" 
+          alt="google logo"
+        />
+        <span>Sign in with Google</span>
+      </button>
+    </main>
+  )
 }

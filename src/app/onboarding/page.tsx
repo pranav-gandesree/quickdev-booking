@@ -1,3 +1,4 @@
+
 import OnBoarding from "@/components/canvas/OnBoarding"
 
 const OnBoardingPage = () => {

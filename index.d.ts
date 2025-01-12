@@ -8,7 +8,8 @@ declare module "next-auth" {
       email: string;
       name: string;
       image: string;
-      role: string;
+      role: 'USER' | 'DEVELOPER'
+      hasOnboarded: boolean
     };
     accessToken: string; 
   }
@@ -16,7 +17,7 @@ declare module "next-auth" {
   interface JWT {
     uid: string;
     email: string;
-    role: string;
+    role: 'USER' | 'DEVELOPER'
     accessToken: string;
   }
 }

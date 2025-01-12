@@ -5,13 +5,14 @@ import DeveloperDashboard from "@/components/canvas/DeveloperDashboard";
 import UserDashboard from "@/components/canvas/UserDashboard";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
+import { useEffect } from "react";
 
  const DashboardPage = () => {
   const { data: session } = useSession();
 
-  if (!session?.user?.email) {
-    redirect("/");
-  }
+  useEffect(()=>{
+    console.log("session in dashboard is ", session)
+  }, [session])
   
   if (session?.user.role === "DEVELOPER") {
     return <DeveloperDashboard/>;

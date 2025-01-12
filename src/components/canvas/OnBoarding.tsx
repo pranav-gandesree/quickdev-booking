@@ -1,12 +1,14 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { toast } from '@/hooks/use-toast'
+import { useSession } from 'next-auth/react'
 
 interface DeveloperProfile {
   bio: string
@@ -19,6 +21,7 @@ interface DeveloperProfile {
 }
 
 export default function OnBoarding() {
+  const { data: session } = useSession()
   const router = useRouter()
   const [step, setStep] = useState(0)
   const [userType, setUserType] = useState<'USER' | 'DEVELOPER' | null>(null)
@@ -28,38 +31,58 @@ export default function OnBoarding() {
     portfolio: '',
     hourlyRate: '',
     availability: '',
-    technologies: [],
+    technologies: [''],
     experience: ''
   })
 
   const handleRoleChange = async (role: 'USER' | 'DEVELOPER') => {
     setUserType(role)
-    // Update the role in the database using Prisma
-    // try {
-    //   const response = await fetch("/api/updateRole", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({ role }),
-    //   })
-
-    //   if (!response.ok) {
-    //     throw new Error("Failed to update role")
-    //   }
-
-    //   console.log("Role updated successfully:", role)
-
-    //   if (role === 'user') {
-    //     router.push('/dashboard')
-    //   } else {
-    //     setStep(1)
-    //   }
-    // } catch (error) {
-    //   console.error("Error updating role:", error)
-    // }
-
   }
+
+useEffect(()=>{
+  console.log("session is ", session)
+
+}, [session])
+
+  const handleSubmitProfile = async () => {
+    try {
+      const response = await fetch('/api/onboarding', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userType,
+          developerProfile
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to update profile')
+      }
+
+      const data = await response.json()
+      
+      if (data.success) {
+        toast({
+          title: 'Profile Updated',
+          description: 'Your profile has been successfully updated!',
+        })
+        
+
+          router.push('/dashboard')
+       
+      }
+    } catch (error) {
+      console.error('Error updating profile:', error)
+      toast({
+        title: 'Error',
+        description: 'Failed to update profile. Please try again.',
+        variant: 'destructive',
+      })
+    }
+  }
+
 
   const handleNext = () =>{
     if (userType === 'USER') {
@@ -69,11 +92,11 @@ export default function OnBoarding() {
       }
   }
 
-  const handleNextStep = () => {
+  const handleNextStep = async() => {
     if (step < 2) {
       setStep(step + 1)
     } else {
-      router.push('/dashboard')
+      await handleSubmitProfile()
     }
   }
 
@@ -251,3 +274,41 @@ export default function OnBoarding() {
     </div>
   )
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
