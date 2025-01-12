@@ -18,6 +18,7 @@ export interface User {
     github: string;
     technologies: string[]; 
     availability: boolean;
-    user: User; // Nested User object
+    user: User; 
+    walletAddress: string
   }
   

@@ -4,6 +4,11 @@ import "./globals.css";
 import { Providers } from "./providers";
 import { Toaster } from "@/components/ui/toaster";
 
+import {
+  PhantomWalletAdapter,
+} from '@solana/wallet-adapter-wallets';
+import { SolanaProvider } from "@/components/canvas/SolanaProvider";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -24,14 +29,22 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased  bg-[#262526]`}>
-          <Providers>
-            {children}
-            <Toaster/>
-          </Providers>
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#262526]`}>
+
+
+        <SolanaProvider>
+            <Providers>
+              {children}
+              <Toaster />
+            </Providers>
+        </SolanaProvider>
+        
+
       </body>
     </html>
   );
